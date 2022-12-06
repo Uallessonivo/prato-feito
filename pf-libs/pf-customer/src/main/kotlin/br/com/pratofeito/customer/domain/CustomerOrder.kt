@@ -16,6 +16,7 @@ import org.axonframework.eventsourcing.EventSourcingHandler
 import org.axonframework.modelling.command.AggregateIdentifier
 import org.axonframework.modelling.command.AggregateLifecycle
 import org.axonframework.spring.stereotype.Aggregate
+import java.lang.UnsupportedOperationException
 
 @Aggregate
 internal class CustomerOrder {
@@ -51,6 +52,8 @@ internal class CustomerOrder {
     fun handle(command: MarkCustomerOrderAsDeliveredCommand) {
         if (CustomerOrderState.CREATED == state) {
             AggregateLifecycle.apply(CustomerOrderDeliveredEvent(command.targetAggregateIdentifier, command.auditEntry))
+        } else {
+            throw UnsupportedOperationException("The current state is not CREATED")
         }
     }
 
