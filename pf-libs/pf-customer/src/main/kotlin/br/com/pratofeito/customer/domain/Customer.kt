@@ -14,6 +14,7 @@ import org.axonframework.eventsourcing.EventSourcingHandler
 import org.axonframework.modelling.command.AggregateIdentifier
 import org.axonframework.modelling.command.AggregateLifecycle
 import org.axonframework.spring.stereotype.Aggregate
+import java.lang.UnsupportedOperationException
 
 @Aggregate
 internal class Customer {
@@ -47,6 +48,8 @@ internal class Customer {
     fun handle(command: CreateCustomerOrderCommand) {
         if (!command.orderTotal.isGreaterThanOrEqual(orderList)) {
             AggregateLifecycle.createNew(CustomerOrder::class.java) { CustomerOrder(command) }
+        } else {
+            throw UnsupportedOperationException("Customer limit is reached")
         }
     }
 
