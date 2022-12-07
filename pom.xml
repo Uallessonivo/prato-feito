@@ -19,6 +19,7 @@
   <modules>
     <module>pf-libs</module>
       <module>pf-libs/pf-customer</module>
+      <module>pf-apps</module>
   </modules>
 
   <properties>
