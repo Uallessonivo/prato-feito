@@ -12,7 +12,16 @@ spring:
       path: /h2-console
 
 axon:
+  serializer:
+    general: jackson
+    events: jackson
+    messages: jackson
   eventhandling:
     processors:
       customer:
         mode: tracking
+  snapshot:
+    trigger:
+      treshold:
+        customer: 100
+        customerorder: 100
