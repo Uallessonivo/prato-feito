@@ -13,7 +13,7 @@ data class CustomerId(val identifier: String): Serializable {
     override fun toString() = identifier
 }
 
-data class CustomerOrderId(val identifier: String): Serializable {
+data class CustomerOrderId(val identifier: String) {
     constructor(): this(UUID.randomUUID().toString())
 
     override fun toString() = identifier

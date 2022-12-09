@@ -8,6 +8,8 @@ data class AuditEntry(val who: String, val `when`: Date)
 data class PersonName(val firstName: String, val lastName: String)
 
 data class Money(val amount: BigDecimal) {
+    constructor() : this(BigDecimal(0))
+
     fun add(delta: Money): Money {
         return Money(amount.add(delta.amount))
     }

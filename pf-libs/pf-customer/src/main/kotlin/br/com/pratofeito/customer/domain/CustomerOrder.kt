@@ -18,7 +18,7 @@ import org.axonframework.modelling.command.AggregateLifecycle
 import org.axonframework.spring.stereotype.Aggregate
 import java.lang.UnsupportedOperationException
 
-@Aggregate
+@Aggregate(snapshotTriggerDefinition = "customerOrderSnapshotTriggerDefinition")
 internal class CustomerOrder {
     @AggregateIdentifier
     private lateinit var id: CustomerOrderId
