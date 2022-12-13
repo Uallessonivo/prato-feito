@@ -40,9 +40,6 @@ internal class CourierOrder {
 
 
 //    fun assignToCourier(command: AssignCourierOrderToCourierCommand) {
-//        AggregateLifecycle.apply(
-//
-//        )
 //    }
 
     // SAGA
