@@ -20,5 +20,6 @@
     <module>pf-core-api</module>
       <module>pf-restaurant</module>
       <module>pf-courier</module>
+      <module>pf-order</module>
   </modules>
 </project>
