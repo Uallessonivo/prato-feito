@@ -23,7 +23,7 @@ open class OrderInfo(
 }
 
 data class OrderLineItem(
-    val menuId: String,
+    val menuItemId: String,
     val name: String,
     @field:Valid val price: Money,
     val quantity: Int

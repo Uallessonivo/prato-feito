@@ -1,12 +1,19 @@
 package br.com.pratofeito.order.domain
 
 import br.com.pratofeito.customer.domain.api.CreateCustomerOrderCommand
+import br.com.pratofeito.customer.domain.api.CustomerOrderCreatedEvent
 import br.com.pratofeito.customer.domain.api.model.CustomerId
 import br.com.pratofeito.customer.domain.api.model.CustomerOrderId
 import br.com.pratofeito.order.domain.api.OrderCreationInitiatedEvent
+import br.com.pratofeito.order.domain.api.OrderVerifiedByCustomerEvent
 import br.com.pratofeito.order.domain.api.model.OrderDetails
 import br.com.pratofeito.order.domain.api.model.OrderId
+import br.com.pratofeito.order.domain.model.MarkOrderAsVerifiedByCustomerInternalCommand
+import br.com.pratofeito.restaurant.domain.api.CreateRestaurantOrderCommand
 import br.com.pratofeito.restaurant.domain.api.model.RestaurantId
+import br.com.pratofeito.restaurant.domain.api.model.RestaurantOrderDetails
+import br.com.pratofeito.restaurant.domain.api.model.RestaurantOrderId
+import br.com.pratofeito.restaurant.domain.api.model.RestaurantOrderLineItem
 import org.axonframework.commandhandling.callbacks.LoggingCallback
 import org.axonframework.commandhandling.gateway.CommandGateway
 import org.axonframework.config.ProcessingGroup
@@ -46,6 +53,36 @@ internal class OrderSaga {
                 event.auditEntry
             ),
             LoggingCallback.INSTANCE
+        )
+    }
+
+    @SagaEventHandler(associationProperty = "customerOrderId")
+    fun on(event: CustomerOrderCreatedEvent) = commandGateway.send(
+        MarkOrderAsVerifiedByCustomerInternalCommand(
+            orderId, customerId, event.auditEntry
+        ),
+        LoggingCallback.INSTANCE
+    )
+
+    @SagaEventHandler(associationProperty = "aggregateIdentifier")
+    fun on(event: OrderVerifiedByCustomerEvent) {
+        val restaurantOrderId = RestaurantOrderId("restaurantOrder_$orderId")
+        SagaLifecycle.associateWith("restaurantOrderId", restaurantOrderId.toString())
+
+        val restaurantLineItems = ArrayList<RestaurantOrderLineItem>()
+        for (oli in orderDetails.lineItems) {
+            val roli = RestaurantOrderLineItem(oli.quantity, oli.menuItemId, oli.name)
+            restaurantLineItems.add(roli)
+        }
+
+        val restaurantOrderDetails = RestaurantOrderDetails(restaurantLineItems)
+        commandGateway.send(
+            CreateRestaurantOrderCommand(
+                restaurantId,
+                restaurantOrderDetails,
+                restaurantOrderId,
+                event.auditEntry
+            ), LoggingCallback.INSTANCE
         )
     }
 }
