@@ -1,7 +1,7 @@
 package br.com.pratofeito.restaurant.domain
 
 import br.com.pratofeito.restaurant.domain.api.CreateRestaurantOrderCommand
-import br.com.pratofeito.restaurant.domain.api.MarkRestaurantOrderAsPrepared
+import br.com.pratofeito.restaurant.domain.api.MarkRestaurantOrderAsPreparedCommand
 import br.com.pratofeito.restaurant.domain.api.RestaurantOrderCreatedEvent
 import br.com.pratofeito.restaurant.domain.api.RestaurantOrderPreparedEvent
 import br.com.pratofeito.restaurant.domain.api.model.RestaurantId
@@ -42,7 +42,7 @@ internal class RestaurantOrder {
     }
 
     @CommandHandler
-    fun handle(command: MarkRestaurantOrderAsPrepared) {
+    fun handle(command: MarkRestaurantOrderAsPreparedCommand) {
         if (RestaurantOrderState.CREATED == state) {
             AggregateLifecycle.apply(
                 RestaurantOrderPreparedEvent(

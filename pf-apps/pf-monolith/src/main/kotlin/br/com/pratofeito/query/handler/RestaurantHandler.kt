@@ -8,6 +8,7 @@ import br.com.pratofeito.restaurant.domain.api.RestaurantCreatedEvent
 import org.axonframework.config.ProcessingGroup
 import org.axonframework.eventhandling.AllowReplay
 import org.axonframework.eventhandling.EventHandler
+import org.axonframework.eventhandling.ResetHandler
 import org.axonframework.eventhandling.SequenceNumber
 import org.springframework.messaging.simp.SimpMessageSendingOperations
 import org.springframework.stereotype.Component
@@ -40,6 +41,9 @@ class RestaurantHandler(
         )
         broadcastUpdates()
     }
+
+    @ResetHandler
+    fun onReset() = repository.deleteAll()
 
     private fun broadcastUpdates() =
         messagingTemplate.convertAndSend("/topic/restaurants.updates", repository.findAll())

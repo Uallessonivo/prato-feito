@@ -46,7 +46,7 @@ data class CreateRestaurantOrderCommand(
     ) : this(targetAggregateIdentifier, orderDetails, RestaurantOrderId(), auditEntry)
 }
 
-data class MarkRestaurantOrderAsPrepared(
+data class MarkRestaurantOrderAsPreparedCommand(
     @TargetAggregateIdentifier override val targetAggregateIdentifier: RestaurantOrderId,
     override val auditEntry: AuditEntry
 ) : RestaurantOrderCommand(targetAggregateIdentifier, auditEntry)
